@@ -23,8 +23,7 @@ const userSchema = new mongoose.Schema(
     },
     userProfile: {
       type: String,
-      default:
-        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQD116U9ZCk8bEaanCeB5rSCC2uqY5Ka_2_EA&s",
+      default: "https://avatar.iran.liara.run/public/boy?username=Ash",
     },
   },
   {

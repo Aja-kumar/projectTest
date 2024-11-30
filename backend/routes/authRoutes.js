@@ -19,6 +19,6 @@ router.post("/logout", logoutController);
 
 router.put("/:id", upload.single("profileImage"), updateUser);
 
-router.get("/:id", protectRoute, GetUser);
+router.get("/:id", GetUser);
 
 export default router;

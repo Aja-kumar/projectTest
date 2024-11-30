@@ -1,3 +1,6 @@
+import jwt from "jsonwebtoken";
+import User from "../models/authModels.js";
+
 export const protectRoute = async (req, res, next) => {
   try {
     const accessToken = req.cookies.Access_token;

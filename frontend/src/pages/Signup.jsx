@@ -50,7 +50,11 @@ const Signup = () => {
 
       sessionStorage.setItem("user", JSON.stringify(userData));
 
-      navigate("/userProfile");
+      if (userData.data.role === "user") {
+        navigate("/userProfile");
+      } else {
+        navigate("/dashboard");
+      }
 
       toast.success("Signup successful!");
     } catch (error) {

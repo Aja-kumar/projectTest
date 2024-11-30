@@ -170,7 +170,9 @@ export const updateUser = async (req, res) => {
     // Update user details
     user.username = username;
     if (req.file) {
-      user.userProfile = req.file.filename; // Save the uploaded file's name
+      user.userProfile = `${req.protocol}://${req.get("host")}/uploads/${
+        req.file.filename
+      }`;
     }
 
     await user.save();

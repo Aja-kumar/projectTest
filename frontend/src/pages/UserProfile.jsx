@@ -5,19 +5,57 @@ import axios from "axios";
 import toast from "react-hot-toast";
 
 const UserProfile = () => {
-  const [data, setData] = useState(null);
+  const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
+  const fetchUserData = async (userId) => {
+    try {
+      if (!userId) {
+        console.error("User ID is missing");
+        return;
+      }
+
+      const response = await axios.get(
+        `http://localhost:4000/api/auth/${userId}`,
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+          withCredentials: true,
+        }
+      );
+      const userData = response.data;
+      // console.log(userData);
+      setData(userData.user);
+    } catch (error) {
+      if (error.response?.status === 401) {
+        toast.error("Unauthorized. Please log in.");
+      } else {
+        console.error(error);
+        toast.error("Failed to fetch user data");
+      }
+    } finally {
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
     const userData = sessionStorage.getItem("user");
     if (userData) {
       try {
         const parsedData = JSON.parse(userData);
-        setData(parsedData.data);
+        const userId = parsedData.data._id;
+
+        if (userId) {
+          fetchUserData(userId);
+        } else {
+          console.error("User ID not found in session storage");
+        }
       } catch (error) {
         console.error("Error parsing user data:", error);
       }
+    } else {
+      console.error("No user data found in session storage");
     }
     setLoading(false);
   }, []);
@@ -47,16 +85,11 @@ const UserProfile = () => {
 
   return (
     <div className="Container">
-      {data ? (
+      {data?.username ? (
         <div>
-          <img
-            src={
-              data.UserProfile
-                ? `http://localhost:4000${data.UserProfile}`
-                : "fallback-image-url.jpg"
-            }
-            alt="Profile"
-          />
+          <div>
+            <img src={data.userProfile} alt="Profile" />
+          </div>
           <Button variant="contained" color="success" onClick={handleEdit}>
             Edit
           </Button>
